@@ -23,10 +23,28 @@
                     <a href="/edit/<%= posts[i]._id %>" style="text-decoration: none;">
                         글 수정
                     </a>
+                    <span class="delete" data-id="<%= posts[i]._id %>">del</span>
                     <p><%= posts[i].content %></p>
                 </div>
             </div>
         <% } %>
     </div> 
   </body>
+  <script>
+	document.querySelectorAll(".delete").forEach(button => {
+        button.addEventListener("click", function(){
+          const docid = this.getAttribute("data-id");
+          fetch(`/delete?docid=${docid}`, {
+            method: "DELETE"
+          })
+          .then(response => response.text())
+          .then(data => {
+            if (data === "삭제완료") {
+              // 삭제 성공 시, 화면에서 해당 게시글을 제거하거나 새로고침
+              this.parentElement.parentElement.remove();
+            }
+          });
+        });
+      });
+</script>
 </html>
